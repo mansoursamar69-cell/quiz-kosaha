@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+
+<html lang="ar" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>الكُساحة - لعبة الكويز</title>
+
+    <style>
+
+        body {
+
+            font-family: Arial;
+
+            background: #e8f5e9;
+
+            text-align: center;
+
+            padding: 20px;
+
+        }
+
+        h1 {
+
+            color: #1b5e20;
+
+        }
+
+        .box {
+
+            background: white;
+
+            padding: 20px;
+
+            margin: 20px auto;
+
+            max-width: 600px;
+
+            border-radius: 15px;
+
+        }
+
+        button {
+
+            background: #2e7d32;
+
+            color: white;
+
+            border: none;
+
+            padding: 12px;
+
+            margin: 8px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+        }
+
+        button:hover {
+
+            background: #1b5e20;
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <h1>🌿 الكُساحة والوعي البيئي</h1>
+
+    <div class="box">
+
+        <h2>ما هي الكُساحة؟</h2>
+
+        <p>
+
+            الكُساحة موضوع يرتبط بالفضلات والتخلّص منها،
+
+            ويمكننا اليوم تثمين الفضلات وتحويلها إلى موارد نافعة.
+
+        </p>
+
+    </div>
+
+    <div class="box">
+
+        <h2>أبو سعيد في كتاب البخلاء</h2>
+
+        <p>
+
+            يعرض الجاحظ في كتاب البخلاء سلوكات البخل
+
+            بطريقة ساخرة، ويدعونا إلى التفكير في تصرّفات الإنسان.
+
+        </p>
+
+    </div>
+
+    <div class="box">
+
+        <h2>♻️ كيف نحافظ على البيئة؟</h2>
+
+        <p>نفرز الفضلات، ونعيد استعمال الأشياء، ونحافظ على نظافة محيطنا.</p>
+
+    </div>
+    <div class="box">
+    <h2>🎮 لعبة الكويز</h2>
+
+    <p id="question"></p>
+    <div id="answers"></div>
+    <p id="result"></p>
+    <p id="points">النقاط: 0</p>
+
+    <button id="start">ابدأ اللعبة</button>
+    <button id="next" style="display:none">
+        السؤال التالي
+    </button>
+    </div>
+
+    <script>
+        let score = 0;
+let current = 0;
+
+const questions = [
+    {
+        q: "ما فائدة إعادة تدوير الفضلات؟",
+        answers: ["حماية البيئة", "زيادة التلوث", "تبذير الموارد"],
+        correct: 0
+    },
+    {
+        q: "من ألّف كتاب البخلاء؟",
+        answers: ["المتنبي", "الجاحظ", "أبو نواس"],
+        correct: 1
+    },
+    {
+        q: "كيفاش نتصرفوا في الفضلات؟",
+        answers: ["نرميها في الشارع", "نحرقوها", "نفرزوها ونعيدوا تدويرها"],
+        correct: 2
+    },
+    {
+        q: "شنوّة معنى تثمين الفضلات؟",
+        answers: [
+            "تحويلها إلى موارد نافعة",
+            "رميها في البحر",
+            "زيادة حجمها"
+        ],
+        correct: 0
+    },
+    {
+        q: "شنوّة السلوك الصحيح في المحيط؟",
+        answers: [
+            "رمي الأوساخ",
+            "المحافظة على النظافة",
+            "تلويث الماء"
+        ],
+        correct: 1
+    },
+    {
+        q: "في أي كتاب نجد شخصية أبي سعيد ضمن نصّنا؟",
+        answers: ["البخلاء", "الأيام", "المقدمة"],
+        correct: 0
+    }
+];
+
+function showQuestion() {
+    document.getElementById("result").innerText = "";
+
+    if (current >= questions.length) {
+        document.getElementById("question").innerText =
+            "انتهت اللعبة! 🎉 نتيجتك: " + score +
+            " / " + questions.length;
+
+        document.getElementById("answers").innerHTML = "";
+        document.getElementById("next").style.display = "none";
+        return;
+    }
+
+    let q = questions[current];
+    document.getElementById("question").innerText =
+        (current + 1) + ". " + q.q;
+
+    document.getElementById("answers").innerHTML = "";
+
+    q.answers.forEach(function (answerText, i) {
+        let btn = document.createElement("button");
+        btn.innerText = answerText;
+
+        btn.onclick = function () {
+            checkAnswer(i);
+        };
+
+        document.getElementById("answers").appendChild(btn);
+    });
+
+    document.getElementById("next").style.display = "none";
+}
+
+function checkAnswer(choice) {
+    let q = questions[current];
+    let buttons = document.querySelectorAll("#answers button");
+
+    buttons.forEach(function (btn) {
+        btn.disabled = true;
+    });
+
+    if (choice === q.correct) {
+        score++;
+        document.getElementById("result").innerText =
+            "إجابة صحيحة! أحسنت! ✅";
+    } else {
+        document.getElementById("result").innerText =
+            "إجابة خاطئة! الإجابة الصحيحة هي: " +
+            q.answers[q.correct];
+    }
+
+    document.getElementById("points").innerText =
+        "النقاط: " + score;
+
+    document.getElementById("next").style.display = "inline-block";
+}
+
+document.getElementById("start").onclick = function () {
+    score = 0;
+    current = 0;
+    document.getElementById("points").innerText = "النقاط: 0";
+    document.getElementById("start").style.display = "none";
+    showQuestion();
+};
+
+document.getElementById("next").onclick = function () {
+    current++;
+    showQuestion();
+};
+
+    </script>
+
+</body>
+
+</html>
